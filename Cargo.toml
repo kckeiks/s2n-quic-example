@@ -9,7 +9,7 @@ criterion = { version = "0.4.0", features = ["html_reports", "async_tokio"] }
 futures = "0.3"
 rcgen = "0.10"
 rustls = { version = "0.20", default-features = false, features = ["dangerous_configuration"]}
-tokio = { version = "1.0" , features = ["full", "tracing"] }
+tokio = { version = "1.0" , features = ["full"] }
 s2n-quic = { version = "1.18", default-features = false, features = ["provider-address-token-default", "provider-tls-rustls"] }
 
 
