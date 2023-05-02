@@ -8,6 +8,8 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
 pub fn criterion_benchmark(c: &mut Criterion) {
     let mut g = c.benchmark_group(format!("S2N-QUIC"));
+    g.sample_size(20);
+
     let runtime = tokio::runtime::Builder::new_multi_thread()
         .enable_all()
         .build()
