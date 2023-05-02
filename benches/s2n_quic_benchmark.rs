@@ -1,4 +1,4 @@
-use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
 use futures::future::join_all;
 use s2n_quic::client::Connect;
 use s2n_quic::provider::tls;
@@ -7,6 +7,7 @@ use std::net::SocketAddr;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
 pub fn criterion_benchmark(c: &mut Criterion) {
+    let mut g = c.benchmark_group(format!("S2N-QUIC"));
     let runtime = tokio::runtime::Builder::new_multi_thread()
         .enable_all()
         .build()
@@ -54,7 +55,9 @@ pub fn criterion_benchmark(c: &mut Criterion) {
 
     let mut num_request = 1;
     while num_request <= 64 {
-        c.bench_with_input(
+        let len = 1024 * num_request;
+        g.throughput(Throughput::Bytes(len as u64));
+        g.bench_with_input(
             BenchmarkId::new(format!("{num_request} requests"), num_request),
             &num_request,
             |bencher, &size| {
