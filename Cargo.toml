@@ -11,7 +11,24 @@ rcgen = "0.10"
 rustls = { version = "0.20", default-features = false, features = ["dangerous_configuration"]}
 tokio = { version = "1.0" , features = ["full"] }
 s2n-quic = { version = "1.18", default-features = false, features = ["provider-address-token-default", "provider-tls-rustls"] }
+benchmarks_utils = { git = "https://github.com/qti3e/benchmarks", rev = "c3c9c354dced98fdad0b08dacc8e8bd8fefcb08e", package = "benchmarks" }
 
+
+arrayref = "0.3"
+arrayvec = "0.7"
+bytes = "1.4"
+elliptic-curve = { version = "0.13", default-features = false, features = ["hash2curve", "arithmetic"] }
+k256 = { version = "0.13", default-features = false, features = ["arithmetic", "hash2curve", "expose-field"] }
+rand_core = "0.6"
+rand_hc = "0.3"
+sha2 = "0.10"
+# Binary benchmark dependencies
+serde = { version = "1.0", features = ["derive"], optional = true }
+serde_json = { version = "1.0", optional = true }
+rayon  = { version = "1.7", optional = true }
+fnv = { version = "1.0", optional = true }
+clap = { version = "4.2", features = ["derive"], optional = true }
+gnuplot = { version = "0.0.37", optional = true }
 
 [[bench]]
 name = "s2n_quic_benchmark"
