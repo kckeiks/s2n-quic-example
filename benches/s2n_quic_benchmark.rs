@@ -35,10 +35,12 @@ pub fn criterion_benchmark(c: &mut Criterion) {
                     match conn.accept_bidirectional_stream().await {
                         Ok(Some(mut stream)) => {
                             tokio::task::spawn(async move {
-                                let mut buf = [0; 5];
-                                stream.read(&mut buf).await.unwrap();
-                                assert_eq!(&buf, b"hello");
-                                stream.write(&content_clone).await.unwrap();
+                                for _ in 0..10 {
+                                    let mut buf = [0; 5];
+                                    stream.read(&mut buf).await.unwrap();
+                                    assert_eq!(&buf, b"hello");
+                                    stream.write(&content_clone).await.unwrap();
+                                }
                             });
                         }
                         Ok(None) => break,
@@ -75,10 +77,11 @@ pub fn criterion_benchmark(c: &mut Criterion) {
                         for _ in 0..size {
                             let mut stream = connection.open_bidirectional_stream().await.unwrap();
                             let task = tokio::task::spawn(async move {
-                                stream.write(b"hello").await.unwrap();
-                                let mut buf = Vec::with_capacity(1024);
-                                let n = stream.read_to_end(&mut buf).await.unwrap();
-                                assert_eq!(n, 1024);
+                                for _ in 0..10 {
+                                    stream.write(b"hello").await.unwrap();
+                                    let mut buf = [0; 1024];
+                                    stream.read_exact(&mut buf).await.unwrap();
+                                }
                             });
                             tasks.push(task);
                         }
